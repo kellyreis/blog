@@ -10,6 +10,7 @@ namespace blog
     class Program
     {
 
+
         static void Main(string[] args)
         {
             var connection = new SqlConnection(CONNECTION_STRING);
@@ -23,7 +24,7 @@ namespace blog
 
         public static void ReadUsers(SqlConnection connection)
         {
-            var repository = new UserRepository(connection);
+            var repository = new Repository<User>(connection);
             var users = repository.GetAll();
 
             foreach (var item in users)
@@ -33,7 +34,7 @@ namespace blog
 
         public static void ReadRoles(SqlConnection connection)
         {
-            var repository = new RoleRepository(connection);
+            var repository = new Repository<Role>(connection);
             var roles = repository.GetAll();
 
             foreach (var item in roles)
@@ -41,11 +42,7 @@ namespace blog
 
         }
         //Busca Apenas um usuario
-        public static void ReadUser(SqlConnection connection)
-        {
-            var user = connection.Get<User>(1);
-            Console.WriteLine(user.Name);
-        }
+
 
         public static void CreateUser(SqlConnection connection)
         {
@@ -60,7 +57,9 @@ namespace blog
             };
 
             //Retorna long linhas afetadas
-            connection.Insert<User>(user);
+            var repository = new Repository<User>(connection);
+            repository.Create(user);
+
             Console.WriteLine("cadastro realizado com sucesso");
         }
         public static void UpdateUser(SqlConnection connection)
